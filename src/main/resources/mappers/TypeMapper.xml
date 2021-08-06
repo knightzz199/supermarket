@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kxt.supermarket.mapper.TypeMapper">
+    <resultMap id="TypeMap" type="com.kxt.supermarket.pojo.Type">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="name" column="name" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="allColumn">
+        <!--@sql select -->id,name<!--@sql from type -->
+    </sql>
+
+    <select id="queryTypeById" resultMap="TypeMap">
+        select <include refid="allColumn"/> from type where id=#{id}
+    </select>
+    <select id="queryTypeByName" resultMap="TypeMap">
+        select <include refid="allColumn"/> from type where name=#{name}
+    </select>
+
+    <insert id="addType" parameterType="com.kxt.supermarket.pojo.Type">
+        insert into type (<include refid="allColumn"/>)
+        value (#{id},#{name})
+    </insert>
+
+    <delete id="deleteTypeById">
+        delete from type where id=#{id}
+    </delete>
+
+    <update id="updateType" parameterType="com.kxt.supermarket.pojo.Type">
+        update type
+        <set>
+            <if test="name != null">
+                name=#{name}
+            </if>
+        </set>
+        where id=#{id}
+    </update>
+</mapper>

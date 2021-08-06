@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.kxt.supermarket.mapper.UserMapper">
+    <resultMap id="UserMap" type="com.kxt.supermarket.pojo.User">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="username" column="username" jdbcType="VARCHAR"/>
+        <result property="password" column="password" jdbcType="VARCHAR"/>
+        <result property="sex" column="sex" jdbcType="INTEGER"/>
+        <result property="picUrl" column="pic_url" jdbcType="VARCHAR"/>
+    </resultMap>
+    <sql id="allColumn">
+        <!--@sql select --> id,username,password,sex,pic_url <!--@sql from user -->
+    </sql>
+
+    <select id="queryUserById" resultMap="UserMap">
+        select <include refid="allColumn"/> from user where id = #{id}
+    </select>
+
+    <select id="queryUserByUsername" resultMap="UserMap">
+        select <include refid="allColumn"/> from user where username = #{username}
+    </select>
+
+    <insert id="addUser" parameterType="com.kxt.supermarket.pojo.User">
+        insert into user (<include refid="allColumn"/>) value
+        (#{id},#{username},#{password},#{sex},#{picUrl})
+    </insert>
+
+    <update id="updateUser" parameterType="com.kxt.supermarket.pojo.User">
+        update user
+        <set>
+            <if test="username != null ">
+                username = #{username},
+            </if>
+            <if test="password != null">
+                password = #{password},
+            </if>
+            <if test="sex != null">
+                sex = #{sex},
+            </if>
+            <if test="picUrl != null">
+                pic_url = #{picUrl}
+            </if>
+        </set>
+         where id = #{id}
+    </update>
+
+    <delete id="deleteUserById">
+        delete from user where id = #{id}
+    </delete>
+</mapper>

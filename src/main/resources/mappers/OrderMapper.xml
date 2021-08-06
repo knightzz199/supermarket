@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kxt.supermarket.mapper.OrderMapper">
+    <resultMap id="OrderMap" type="com.kxt.supermarket.pojo.Order">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="num" column="num" jdbcType="INTEGER"/>
+        <result property="price" column="price" jdbcType="DECIMAL"/>
+        <result property="expressFee" column="express_fee" jdbcType="DECIMAL"/>
+        <result property="goodsId" column="goods_id" jdbcType="INTEGER"/>
+        <result property="userId" column="user_id" jdbcType="INTEGER"/>
+        <result property="addressId" column="address_id" jdbcType="INTEGER"/>
+        <result property="state" column="state" jdbcType="INTEGER"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="totalPrice" column="total_price" jdbcType="DECIMAL"/>
+        <result property="adminId" column="admin_id" jdbcType="INTEGER"/>
+        <result property="orderNum" column="order_num" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="allColumn">
+            <!--@sql select -->id,num,price,express_fee,goods_id,user_id,address_id,`state`,create_time,total_price,admin_id,order_num<!--@sql from `order` -->
+    </sql>
+
+    <select id="queryOrderById" resultMap="OrderMap">
+        select <include refid="allColumn"/> from `order` where id=#{id}
+    </select>
+    <select id="queryOrderByNum" resultMap="OrderMap" parameterType="java.lang.String">
+        select <include refid="allColumn"/> from `order`where order_num=#{oderNum}
+    </select>
+    <select id="queryAllOrderByUid" resultMap="OrderMap">
+        select <include refid="allColumn"/> from `order`where user_id=#{uid}
+    </select>
+    <select id="queryOrderByState" resultMap="OrderMap">
+        select <include refid="allColumn"/> from `order` where state=#{state}
+    </select>
+
+    <insert id="addOrder" parameterType="com.kxt.supermarket.pojo.Order">
+        insert into `order` (<include refid="allColumn"/>)
+        value (#{id},#{num},#{price},#{expressFee},#{goodsId},#{userId},
+        #{addressId},#{state},#{createTime},#{totalPrice},#{adminId},#{orderNum})
+    </insert>
+
+    <delete id="deleteOrderById">
+        delete from `order` where id=#{id}
+    </delete>
+
+    <update id="updateOrder" parameterType="com.kxt.supermarket.pojo.Order">
+        update `order`
+        <set>
+            <if test="num != null">
+                num=#{num},
+            </if>
+            <if test="price != null">
+                price=#{price},
+            </if>
+            <if test="expressFee != null">
+                express_fee=#{expressFee},
+            </if>
+            <if test="goodsId != null">
+                goods_id=#{goodsId},
+            </if>
+            <if test="userId != null">
+                user_id=#{userId},
+            </if>
+            <if test="addressId != null">
+                address_id=#{addressId},
+            </if>
+            <if test="state != null">
+                state=#{state},
+            </if>
+            <if test="createTime != null">
+                create_time=#{createTime},
+            </if>
+            <if test="totalPrice != null">
+                total_price=#{totalPrice},
+            </if>
+            <if test="adminId != null">
+                admin_id=#{adminId},
+            </if>
+            <if test="orderNum != null">
+                order_num=#{orderNum}
+            </if>
+        </set>
+        where id=#{id}
+    </update>
+</mapper>

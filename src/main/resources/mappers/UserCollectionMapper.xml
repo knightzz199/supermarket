@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kxt.supermarket.mapper.UserCollectionMapper">
+    <resultMap id="UserCollectionMap" type="com.kxt.supermarket.pojo.UserCollection">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="userId" column="user_id" jdbcType="INTEGER"/>
+        <result property="goodsId" column="goods_id" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <sql id="allColumn">
+            <!--@sql select -->id,user_id,goods_id<!--@sql from user_collection -->
+    </sql>
+
+    <select id="queryUserCollectionById" resultMap="UserCollectionMap">
+        select <include refid="allColumn"/> from user_collection where id=#{id}
+    </select>
+    <select id="queryUserCollectionByUid" resultMap="UserCollectionMap">
+        select <include refid="allColumn"/> from user_collection where user_id=#{uid}
+    </select>
+
+    <insert id="addUserCollection" parameterType="com.kxt.supermarket.pojo.UserCollection">
+        insert into user_collection (<include refid="allColumn"/>)
+        value (#{id},#{userId},#{goodsId})
+    </insert>
+
+    <delete id="deleteUserCollectionById">
+        delete from user_collection where id=#{id}
+    </delete>
+
+    <update id="updateUserCollection" parameterType="com.kxt.supermarket.pojo.UserCollection">
+        update user_collection
+        <set>
+            <if test="userId != null">
+                user_id=#{userId},
+            </if>
+            <if test="goodsId != null">
+                goods_id=#{goodsId}
+            </if>
+        </set>
+        where id=#{id}
+    </update>
+</mapper>

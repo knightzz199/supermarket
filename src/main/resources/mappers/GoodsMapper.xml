@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kxt.supermarket.mapper.GoodsMapper">
+    <resultMap id="GoodsMap" type="com.kxt.supermarket.pojo.Goods">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="goodsDescription" column="goods_description" jdbcType="VARCHAR"/>
+        <result property="picUrl" column="pic_url" jdbcType="VARCHAR"/>
+        <result property="stock" column="stock" jdbcType="INTEGER"/>
+        <result property="state" column="state" jdbcType="INTEGER"/>
+        <result property="saleNum" column="sale_num" jdbcType="INTEGER"/>
+        <result property="goodsPrice" column="goods_price" jdbcType="DECIMAL"/>
+        <result property="adminId" column="admin_id" jdbcType="INTEGER"/>
+        <result property="typeId" column="type_id" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <sql id="allColumn">
+            <!--@sql select -->id,goods_description,pic_url,stock,`state`,sale_num,goods_price,admin_id,type_id<!--@sql from goods order by sale_num desc -->
+    </sql>
+
+    <select id="queryAllGoodsBySale" resultMap="GoodsMap">
+        select <include refid="allColumn"/> from goods order by sale_num desc
+    </select>
+    <select id="queryAllGoodsDownPrice" resultMap="GoodsMap">
+        select <include refid="allColumn"/> from goods order by goods_price desc
+    </select>
+    <select id="queryAllGoodsUpPrice" resultMap="GoodsMap">
+        select <include refid="allColumn"/> from goods order by goods_price
+    </select>
+    <select id="queryGoodsById" resultMap="GoodsMap">
+        select <include refid="allColumn"/> from goods where id=#{id}
+    </select>
+    <select id="queryAllGoodsByAdminId" resultMap="GoodsMap">
+        select <include refid="allColumn"/> from goods where admin_id=#{aid}
+    </select>
+    <select id="queryGoodsByState" resultMap="GoodsMap">
+        select <include refid="allColumn"/> from goods where state = #{state}
+    </select>
+
+    <!--keyProperty="id" useGeneratedKeys="true"  添加两个属性可以得到插入数据后的id值-->
+    <insert id="addGoods" keyProperty="id" useGeneratedKeys="true" parameterType="com.kxt.supermarket.pojo.Goods">
+        insert into goods (<include refid="allColumn"/>)
+        value (#{id},#{goodsDescription},#{picUrl},#{stock},#{state}
+        ,#{saleNum},#{goodsPrice},#{adminId},#{typeId})
+    </insert>
+
+    <delete id="deleteGoodsById">
+        delete from goods where id=#{id}
+    </delete>
+
+    <update id="updateGoods" parameterType="com.kxt.supermarket.pojo.Goods">
+        update goods
+        <set>
+            <if test="goodsDescription != null">
+                goods_description=#{goodsDescription},
+            </if>
+            <if test="picUrl != null">
+                pic_url=#{picUrl},
+            </if>
+            <if test="stock != null">
+                stock=#{stock},
+            </if>
+            <if test="state != null">
+                state=#{state},
+            </if>
+            <if test="saleNum != null">
+                sale_num=#{saleNum},
+            </if>
+            <if test="goodsPrice != null">
+                goods_price=#{goodsPrice},
+            </if>
+            <if test="adminId != null">
+                admin_id=#{adminId},
+            </if>
+            <if test="typeId != null">
+                type_id=#{typeId}
+            </if>
+        </set>
+        where id=#{id}
+    </update>
+</mapper>
