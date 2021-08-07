@@ -3,9 +3,9 @@
 
 # 使用说明
 1.克隆到本地
-`
+```
 git clone https://github.com/knightzz199/supermarket.git
-`
+```
 
 2.修改项目中所有的配置主机和密码
 application.properties中mysql配置,redis配置,rabbitmq配置,config包中elasticsearch配置，gitee图床配置，还可以更改swagger的配置
